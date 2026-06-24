@@ -1,0 +1,19 @@
+Visual Studio의 터미널에서 npm or npx 명령어를 인식하지 못하는 에러가 발생한다면.
+
+* 권한이 없어서 일어나는 에러
+
+> Windows Powershell을 관리자 권한으로 실행
+ $ Set-ExecutionPolicy RemoteSigned
+
+ 를 입력하고 Y
+
+# visual studio를 완전히 껐다가 다시켜야 적용됨.
+
+
+
+
+
+
+-----------------------------------------------------------
+* npx create-react-app hello    중 에러 발생하면.. 
+ $ npm install -g npm

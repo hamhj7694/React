@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>class</title>
+
+    <script>
+        // 객체 생성하는 새로운 방법 : class 등장
+        
+        // 1. 기존방식 [리터럴 객체 - 생성하면서 멤버 설계]
+        const p = {
+            // 멤버 변수
+            name:'sam',
+            age:20,
+            // 멤버 함수
+            show: function(){
+                document.write(this.name+":"+this.age+'<br><br>');
+            }
+        };
+        p.show();
+        
+        // 객체 만들 때마다 멤버 설계하는 것 짜증.
+        // 그래서 먼저 멤버의 구조를 설계하고.. 필요할 때 그 설계도로 객체를 생성하여 사용
+        // 2. [기존방식] 생성자 함수
+        function Board(title, message, date){
+            // 멤버변수
+            this.title= title;
+            this.message= message;
+            this.date= date;
+            // 멤버함수
+            this.show= function(){
+                document.write(this.title+'<br>');
+                document.write(this.message+'<br>');
+                document.write(this.date+'<br><br>');
+            }
+        }
+
+        // 위 설계도 모습으로 객체 생성
+        const b1= new Board('hello', 'nice to m2', '2026-06-23');
+        const b2= new Board('hello', 'nice to m2', '2026-06-24');
+
+        b1.show();
+        b2.show();
+        document.write('<hr>');
+        // －－－－－－－－－－－－－－－－－－－－－－－－－－－－
+
+        // 3. 새로 등장한 설계도 만드는 키워드 class 등장!
+        class Person{
+            // 멤버변수 - 별도 키워드(let, var 등) 없이 작성
+            name='sam';
+            age=20;
+
+            // 객체를 생성하면서 값을 전달 받고 싶으면?
+            // 생성자 함수를 이 안에서 constructor()로 만들어야함.
+            constructor(name, age, address){
+                //함수 영역 안에서 멤버 변수를 만들려면 this 키워드 필요함!
+                this.name= name;
+                this.age= age;
+                this.address= address; //이때 멤버변수 추가로 만들어짐
+            }
+
+            // 멤버함수 - 키워드 function 없이 작성
+            show(){
+                // 멤버변수 사용할 때는 반드시 this. 키워드 함께!
+                document.write(this.name +", "+ this.age+", "+this.address+'<br>');
+            }
+        }
+
+        const p1= new Person('햄', 27, '서울'); //constructor()에 전달
+        const p2= new Person('로빈', 25, '부산');
+        p1.show();
+        p2.show();
+
+        // 특이점 - js는 유연해서
+        // 설계도에 없던 멤버변수 추가 가능
+        p1.tel= '010-1234-5678';
+        p1.showTel= function(){
+            document.write(this.tel +'<br>');
+        }
+        p1.showTel();
+        // -------------------------------------------
+
+        // 클래스의 상속 (기존 설계도면을 가져와서 조금만 추가해 새로운 설계도 만들기)
+        // 1] 상속 해줄 class (이름, 나이) 생성
+        class Human{
+            constructor(name, age){
+                this.name=name;
+                this.age=age;
+            }
+            show(){
+                document.write('name: '+this.name+"<br>age: "+this.age+'<br>');
+            }
+        }
+
+        // 2] 상속 받을 class (이름, 나이, 전공)
+        class Student extends Human{ //Human을 확장하여 상속
+            constructor(name, age, magor){
+                // 상속해준 클래스 부르는 용어 super
+                super(name, age);
+                this.magor= magor;
+            }
+
+            show(){
+                super.show();
+                document.write('major: '+this.magor +'<br>');
+            }
+        }
+        const s1= new Student('sam', 20, 'ML');
+        const s2= new Student('로빈', 20, 'DA');
+        s1.show();
+        s1.show();
+
+        document.write('<hr>');
+        // －－－－－－－－－－－－－－－－－－－－－－－－－－－－
+        // 클래스의 멤버중에서 객체를 생성하지 않고도 사용이 가능한 멤버를 만들기
+        // 정적static 멤버 (함수/변수)
+        class First{
+            show(){
+                document.write('first show function.....<br>');
+            }
+        }
+        // 클래스는 설계도여서 객체를 만들어야만 멤버를 사용할 수 있음
+        First.show();
+        // 대표적 ...
+        document.write( Math.floor(3.14) + '<br>');
+        // 클래스명으로 사용...!
+        // --------------------------------------------------------
+        
+        // [구조분해할당] ... 객체를 분해하여 필요한 멤버들만 별도의 변수 또는 함수로 뽑아내기..
+        class Nice{
+            name='sam';
+            age=20;
+            address='서울'
+        }
+
+        const nice= new Nice();
+        document.write( nice.name + '<br>');
+        document.write( nice.age + '<br>');
+
+        // 매번 객체명 쓰는 거 짜증!
+        // 그래서 객체 멤버 중 이름, 나이만 추출하기!
+        let {name, age} = nice;
+        document.write( name + '<br>');
+        document.write( age + '<br>');
+
+        // 함수에 객체를 전달하여 멤버를 사용할 때 많이 활용됨.
+        showNiceAge( nice ); // nice 객체 전달 받아서, 그 안에 있는 age 값만 출력하는 기능
+        
+        function showNiceAge( {age} ){ //객체를 파라미터로 받기 -- 구조 분해 할당으로
+            document.write( age+ '<br>');
+        }
+
+        // 참고.. 멤버변수의 이름이 다르면 할당 안됨!
+        let {addresseeeeeeeeeeeeeeeeeeeeeeeeee} = nice; //할당 안됨
+        
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
