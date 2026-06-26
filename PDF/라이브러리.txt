@@ -1,0 +1,9 @@
+외부 스타일 라이브러리 : sass/scss
+외부 스타일 라이브러리 : styled-components
+[별외] 요즘 유행하는 외부 스타일 라이브러리 : bootstrap css, tailwind css
+
+[라이브러리 설치 필요] npm install 이름
+
+라이브러리를 설치하면, 파일들은 node_modules 폴더에 다운로드되며.
+package.json 파일의 dependencies에 등록됨
+[라이브러리는 따로 다운 받아야하는데.. 일괄 다운 받는 방법 --> ] npm install

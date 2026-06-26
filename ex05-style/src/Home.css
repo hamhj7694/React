@@ -1,0 +1,5 @@
+/* 타입 선택자를 통해 스타일 적용 */
+h2{background-color: yellow;}
+
+/* (권장) 클래스 선택자를 통한 스타일 적용 */
+.aa{color: orange; font-size: 2rem;}

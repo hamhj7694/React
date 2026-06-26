@@ -1,0 +1,26 @@
+//계층 구조로 요소 선택 및 스타일 적용
+$menu-text-color:#000;
+
+.menu{
+    ul{
+        list-style: none;
+        border-top: 1px solid red;
+        border-bottom: 1px solid red;
+    }
+
+    li{
+        display: inline-block;
+
+        a{
+            display: block;
+            padding: .5rem 1rem;
+            text-decoration: none;
+
+            // {}영역 안에서 본인을 지칭하는 기호 & 있음
+            &:hover{
+                text-decoration: underline;
+                color: $menu-text-color;
+            }
+        }
+    }
+}

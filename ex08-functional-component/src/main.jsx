@@ -1,11 +1,10 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-// import './index.css'
-// import App from './App.jsx'
+import Home from './Home'
 
-import HomeComponent from './components/HomeComponent'
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HomeComponent />
-  </StrictMode>
+    {/* 함수를 마치 컴포넌트인 것처럼 태그문으로 사용! */}
+    <Home></Home>
+  </StrictMode>,
 )

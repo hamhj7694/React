@@ -3,9 +3,11 @@ import { createRoot } from 'react-dom/client'
 // import './index.css'
 // import App from './App.jsx'
 
-import HomeComponent from './components/HomeComponent'
+import HomeComponent from './HomeComponent'
+
 createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <HomeComponent />
-  </StrictMode>
+  // <StrictMode>
+  //   <App />
+  // </StrictMode>,
+  <HomeComponent/>
 )

@@ -1,0 +1,72 @@
+.container{
+    width: 15rem;
+    border: 1px solid gray;
+    margin: 1rem auto;
+    padding: 3rem;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.logo{width: 60%;}
+
+.login_input{
+    width: 100%;
+    padding: 0.7rem;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    font-size: 12px;
+    background-color: aliceblue;
+    border: 1px solid silver;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.login_btn{
+    width: 100%;
+    padding: 0.5rem;
+    margin-top: 4px;
+    margin-bottom: 4px;
+    background-color: #50a7fd;
+    color: #fff;
+    font-size: 12px;
+    border: none;
+    border-radius: 8px;
+}
+
+.separator{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    width: 100%;
+}
+
+.separator::before{
+    content: "";
+    height: 1px;
+    background-color: silver;
+    flex-grow: 1;
+}
+
+.separator::after{
+    content: "";
+    height: 1px;
+    background-color: silver;
+    flex-grow: 1;
+}
+
+.separator span{ padding: 0 1rem; }
+
+.login_facebook a{
+    margin-top: 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-decoration: none;
+}
+
+.login_facebook img{
+    height: 1rem;
+    margin-right: .5rem;
+}
