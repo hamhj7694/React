@@ -9,7 +9,7 @@ function Board({ searchKeyword = "", selectedCategory = "전체" }){
     const [posts] = useState(postData)
     const [page, setPage] = useState(1)
 
-    const postsPerPage = 7
+    const postsPerPage = 8
 
     // 검색어 정리
     const keyword = searchKeyword.trim().toLowerCase()

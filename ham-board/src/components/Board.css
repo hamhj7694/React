@@ -21,13 +21,13 @@
 
 .Board_wrap {
     width: 100%;
-    min-height: 470px;
+    min-height: 500px;
 
     display: flex;
     flex-direction: column;
 
     margin: 0;
-    padding: 1rem 1.15rem;
+    padding: .85rem 1.15rem 1rem;
 
     border-radius: 1.2rem;
     background-color: var(--color-card);

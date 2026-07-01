@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom"
 import { postData } from "../data/posts"
 import "./PostDetail.css"
 import PostReaction from "../components/PostReaction"
+import RecentFeed from "../components/RecentFeed"
 
 const CURRENT_USER = "나"
 const PARTNER = "너"
@@ -116,7 +117,7 @@ function PostDetail(){
             </div>
 
             <div className="Chat">
-
+                <RecentFeed />
             </div>
         </div>
     )

@@ -40,15 +40,11 @@ function Home({ children }){
                     </div>
                     
                     <div className="Board_info">
-                        <div className="Category">
                             <Category
                                 selectedCategory={selectedCategory}
                                 setSelectedCategory={setSelectedCategory}
                             />
-                        </div>
-                        <div className="Best_list">
                             <RecentFeed />
-                        </div>
                     </div>
                 </div>
             </div>
