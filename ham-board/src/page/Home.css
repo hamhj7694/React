@@ -1,0 +1,99 @@
+.HomePage {
+    width: 100%;
+    min-height: 100vh;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    background-color: #f5f5f5;
+}
+
+/* 전체 레이아웃 박스 */
+.Container {
+    border: 1px solid red;
+    display: flex;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 300px;
+    background-color: white;
+}
+
+/* 왼쪽 메뉴 */
+.Menu {
+    border: 1px solid red;
+    width: 20%;
+    min-width: 180px;
+    flex-shrink: 0;
+    background-color: yellow;
+}
+
+/* 오른쪽 전체 콘텐츠 */
+.Content {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+}
+
+/* 상단 영역 */
+.Header {
+    border: 1px solid red;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+}
+
+/* Top 영역 */
+.Top {
+    border: 1px solid red;
+    height: 80px;
+    flex-shrink: 0;
+}
+
+/* 박스 4개 영역 */
+.Boxs {
+    border: 1px solid red;
+    min-height: 120px;
+    flex-shrink: 0;
+}
+
+/* 메인 영역 */
+.Main {
+    border: 1px solid red;
+    display: flex;
+    flex: 1;
+    min-height: 0;
+}
+
+/* 게시글 리스트 */
+.Board {
+    border: 1px solid red;
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+}
+
+/* 오른쪽 정보 영역 */
+.Board_info {
+    border: 1px solid red;
+    width: 30%;
+    min-width: 220px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 인기 게시물 */
+.Best_list {
+    border: 1px solid red;
+    min-height: 250px;
+    flex: 1;
+}
+
+/* 카테고리 */
+.Category {
+    border: 1px solid red;
+    min-height: 250px;
+    flex: 1;
+}

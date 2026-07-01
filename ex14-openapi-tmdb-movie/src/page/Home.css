@@ -1,0 +1,19 @@
+.Root{
+    background-color: black;
+    color: white;
+    min-height: 100%; /* 이 요소의 부모요소의 사이즈가 있어야 함 */
+    text-align: center;
+    padding: 3rem;
+    /* display: flex;
+    justify-content: center; */
+}
+
+.Root header h1{
+    font-size: 2rem;
+}
+
+.Root main{
+    width: 80%;
+    max-width: 980px;
+    margin: 2.5rem auto;
+}

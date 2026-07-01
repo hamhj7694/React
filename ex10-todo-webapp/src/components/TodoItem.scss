@@ -1,0 +1,46 @@
+.TodoItem{
+    display: flex;
+    background-color: antiquewhite;
+    padding: 1rem;
+
+    &:hover{
+        background-color: bisque;
+    }
+
+    .checkbox{
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        padding: 2px;
+        cursor: pointer;
+    }
+
+    .content{
+        flex: 1;
+        margin-left: 1rem;
+    }
+
+    .delete{
+        font-size: 20px;
+        color: red;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        padding: 2px;
+    }
+
+    &+&{
+        border-top: 1px solid wheat;
+    }
+
+    // 현재요소(.TodoItem) 중에 isDone이라는 클래스명이 있는 요소 선택
+    &.isDone{
+        .checkbox{
+            color: orange;
+        }
+        .content{
+            color: gray;
+            text-decoration: line-through;
+        }
+    }
+}

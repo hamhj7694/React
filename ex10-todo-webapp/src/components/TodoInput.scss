@@ -1,0 +1,46 @@
+.TodoInput{
+    display: flex;
+    flex-direction: row;
+
+    input{
+        // 버튼을 제외한 나머지 영역 모두 차지하기 flex-grow 사용
+        flex: 1; // flex-grow를 축약
+        padding: 1rem;
+        border: none;
+        // focus 받았을 때 outline 그려지지 않게!
+        outline: none;
+        font-size: 1.15rem;
+
+        // 힌트 글씨에 대한 스타일 ... 현재요소를 지칭하는 기호 & 사용
+        // : 의사 선택자 :: 없는 걸 만드는
+        &::placeholder{
+            color: darkgoldenrod;
+        }
+    }
+
+    button{
+        // 경계선 제거
+        border: none;
+        background-color: orange;
+        // SVG 아이콘은 그림처럼 보이지만, 글씨로 그림을 그린것이기에..
+        // 색상을 바꾸려면 글씨색상을 변경하는 것!
+        color: white;
+        font-size: 1.5rem;
+        padding: 1rem;
+
+        // +가 박스의 정 중앙이 아닌듯.. 약간 삐뚫.. 그래서 flex로 재정렬
+        display: flex;
+
+        cursor: pointer;
+        &:hover{
+            background-color: orangered;
+        }
+        &:active{
+            background-color: red;
+        }
+
+        // hover됐을 때 배경색 전환 효과 주기
+        transition: background-color 0.5s;
+        
+    }
+}

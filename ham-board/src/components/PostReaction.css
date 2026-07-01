@@ -1,0 +1,109 @@
+
+.PostDetail_reaction_box {
+    padding: 1rem;
+    border-radius: 1rem;
+    background-color: var(--color-main-light);
+}
+
+.PostDetail_reaction_box p {
+    margin-bottom: .7rem;
+    font-size: .9rem;
+    font-weight: 700;
+}
+
+.Reaction_buttons {
+    display: flex;
+    gap: .5rem;
+}
+
+.Reaction_buttons button {
+    width: 2.4rem;
+    height: 2.4rem;
+    border: none;
+    border-radius: 999px;
+    background-color: white;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: .2s;
+}
+
+.Reaction_buttons button:hover {
+    transform: translateY(-2px);
+    background-color: var(--color-main-light);
+}
+
+.PostDetail_actions {
+    margin-top: 1rem;
+}
+
+.Back_button {
+    padding: .55rem 1rem;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--color-main);
+    color: white;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Back_button:hover {
+    background-color: var(--color-main-hover);
+}
+
+.PostDetail_empty {
+    margin-bottom: 1rem;
+    color: var(--color-text-sub);
+}
+
+.Reaction_buttons button.active {
+    background-color: var(--color-main);
+    color: white;
+    transform: translateY(-2px);
+}
+
+.Reaction_log_box {
+    margin-top: 1rem;
+    padding: .9rem;
+    border-radius: .9rem;
+    background-color: white;
+}
+
+.Reaction_log_title {
+    margin-bottom: .6rem;
+    font-size: .85rem;
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+
+.Reaction_log_list {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.Reaction_log_item {
+    display: grid;
+    grid-template-columns: 5rem 4rem 1fr;
+    align-items: center;
+    padding: .55rem .7rem;
+    border-radius: .7rem;
+    background-color: var(--color-main-light);
+    font-size: .8rem;
+}
+
+.Reaction_log_name {
+    font-weight: 700;
+    color: var(--color-text-main);
+}
+
+.Reaction_log_reaction {
+    text-align: center;
+    color: var(--color-main);
+    font-weight: 700;
+}
+
+.Reaction_log_time {
+    text-align: right;
+    color: var(--color-text-sub);
+}

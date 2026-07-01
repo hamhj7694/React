@@ -1,0 +1,27 @@
+#root{
+    height: 100%; /* 얘보다 더 높은 부모도 있음! index.html에 보면 body가 있음!*/
+}
+
+body{
+    height: 100%; /* 근데 얘도 100%인데 배경이 안 칠해짐..! 더 부모가 있음! */
+    /* 웹앱 전체 폰트 설정 */
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 10px;
+}
+
+html{
+    height: 100%; /* 이 친구가 가장 최상위 부모! */
+}
+
+/* 그런데, 상단에 패딩도 지워야함 */
+*{
+    padding: 0px;
+    margin: 0px;
+}
+
+a{
+    text-decoration: none;
+}
+ul{
+  list-style: none;
+}

@@ -1,0 +1,155 @@
+.PostDetail_wrap {
+    width: 95%;
+    height: 95%;
+    margin: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+}
+
+/* 왼쪽 상세 영역 */
+.PostDetail_card {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+    background-color: var(--color-card);
+    color: var(--color-text-main);
+}
+
+/* 오른쪽 채팅 영역 */
+.Chat {
+    width: 38%;
+    min-width: 280px;
+    height: 100%;
+    padding: 1.5rem;
+    border-radius: 1.2rem;
+    background-color: aqua;
+    flex-shrink: 0;
+}
+
+/* ------------------------------
+    상세 헤더
+------------------------------ */
+
+.PostDetail_header {
+    margin-bottom: 1rem;
+}
+
+.PostDetail_category {
+    display: inline-block;
+    margin-bottom: .6rem;
+    padding: .2rem .6rem;
+    border-radius: 999px;
+    background-color: var(--color-sub-light);
+    color: var(--color-sub);
+    font-size: .75rem;
+    font-weight: 700;
+}
+
+.PostDetail_header h2 {
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+/* ------------------------------
+    메타 정보
+------------------------------ */
+
+.PostDetail_meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem 1.2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--color-border);
+    color: var(--color-text-sub);
+    font-size: .85rem;
+}
+
+.PostDetail_meta strong {
+    color: var(--color-main);
+}
+
+/* ------------------------------
+    본문
+------------------------------ */
+
+.PostDetail_content {
+    min-height: 14rem;
+    padding: 1.5rem 0;
+    line-height: 1.8;
+    font-size: .95rem;
+    color: var(--color-text-main);
+}
+
+/* ------------------------------
+    하단 액션
+------------------------------ */
+
+.PostDetail_actions {
+    margin-top: 1rem;
+}
+
+.Back_button {
+    padding: .55rem 1rem;
+    border: none;
+    border-radius: 999px;
+    background-color: var(--color-main);
+    color: white;
+    font-size: .85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Back_button:hover {
+    background-color: var(--color-main-hover);
+}
+
+.PostDetail_empty {
+    margin-bottom: 1rem;
+    color: var(--color-text-sub);
+}
+
+/* ------------------------------
+    모바일 대응
+------------------------------ */
+
+@media screen and (max-width: 768px) {
+    .PostDetail_wrap {
+        width: 100%;
+        height: auto;
+        min-height: 100%;
+        padding: .8rem;
+        flex-direction: column;
+    }
+
+    .PostDetail_card {
+        width: 100%;
+        height: auto;
+        padding: 1.2rem;
+    }
+
+    .Chat {
+        width: 100%;
+        min-width: 0;
+        height: 320px;
+        padding: 1.2rem;
+    }
+
+    .PostDetail_header h2 {
+        font-size: 1.3rem;
+    }
+
+    .PostDetail_meta {
+        gap: .5rem .8rem;
+        font-size: .8rem;
+    }
+
+    .PostDetail_content {
+        min-height: 10rem;
+        padding: 1.2rem 0;
+        font-size: .9rem;
+    }
+}

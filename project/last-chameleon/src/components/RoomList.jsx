@@ -16,7 +16,7 @@ class RoomList extends Component {
             <h3>{room.title}</h3>
 
             <p className="room-players">
-              인원 {room.players} / {room.maxPlayers}
+              👥 인원 {room.players} / {room.maxPlayers}
             </p>
 
             <span

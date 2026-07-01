@@ -37,20 +37,17 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #ddd;
-  border-radius: 6px;
-  overflow: hidden;
-  background: #f5f5f5;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+  background: transparent;
 }
 
 .room-icon img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
-}
-
-.room-icon img[src=""] {
-  display: none;
+  object-fit: contain;
+  display: block;
 }
 
 /* 방 제목 */
@@ -91,20 +88,74 @@
   align-items: center;
   justify-content: center;
 
-  border: 1px solid #ccc;
+  border: none;
   border-radius: 999px;
 
-  font-size: 10px;
+  font-size: .7rem;
   font-weight: 800;
   white-space: nowrap;
 }
 
+.waiting{
+  color: green;
+  background-color: #D4EDD7;
+}
+
+.full{
+  color: red;
+  background-color: #FDE8E4;
+}
+
 /* 입장 버튼 */
 .room-card button {
-  flex: 0 0 45px;
+  flex: 0 0 60px;
 
-  min-height: 30px;
+  min-height: 35px;
   padding: 0 9px;
 
   font-size: 11px;
+  font-weight: 800;
+  margin: 0 .8rem .2rem .8rem ;
+
+  border: none;
+  border-radius: 10px;
+
+  background: linear-gradient(180deg, #38c979 0%, #25a85f 100%);
+  color: #fff;
+
+  box-shadow:
+    0 4px 0 #168047,
+    0 6px 10px rgba(0, 0, 0, 0.18);
+
+  cursor: pointer;
+}
+
+.room-card button:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 5px 0 #168047,
+    0 8px 12px rgba(0, 0, 0, 0.2);
+}
+
+.room-card button:active {
+  transform: translateY(3px);
+  box-shadow:
+    0 1px 0 #168047,
+    0 3px 6px rgba(0, 0, 0, 0.16);
+}
+
+.room-card button:disabled {
+  transform: translateY(-1px);
+  border: none;
+  background: #D8DCDD;
+  color: #9BA1A4;
+  box-shadow:
+    0 4px 0 #9BA1A4,
+    0 5px 8px rgba(0, 0, 0, 0.08);
+
+  cursor: not-allowed;
+  opacity: 1;
+}
+.room-card button:disabled:hover {
+  filter: brightness(0.8);
 }
