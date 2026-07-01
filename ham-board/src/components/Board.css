@@ -19,47 +19,52 @@
 }
 
 
-/* Board 전체 박스 */
-
 .Board_wrap {
-    width: 95%;
-    height: 95%;
+    width: 100%;
+    min-height: 470px;
+
     display: flex;
     flex-direction: column;
-    margin: auto;
-    padding: 1rem;
+
+    margin: 0;
+    padding: 1rem 1.15rem;
+
     border-radius: 1.2rem;
     background-color: var(--color-card);
     color: var(--color-text-main);
 }
 
-
-/* 상단 제목 영역 */
-
 .Board_title {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
+
     padding: .4rem .2rem 1rem;
     flex-shrink: 0;
 }
 
 .Board_title h2 {
     font-size: 1.25rem;
-    font-weight: 700;
+    font-weight: 800;
     color: var(--color-text-main);
 }
 
 .Board_title button {
     padding: .5rem .9rem;
+
     border: none;
     border-radius: 999px;
+
     background-color: var(--color-main);
     color: white;
+
     font-size: .85rem;
-    font-weight: 600;
+    font-weight: 700;
+
     cursor: pointer;
     transition: .2s;
+    white-space: nowrap;
 }
 
 .Board_title button:hover {
@@ -68,23 +73,22 @@
 }
 
 
-/* 리스트 영역 */
-
 .Board_list_wrap {
     width: 100%;
     flex: 1;
+
     display: flex;
     flex-direction: column;
     min-height: 0;
 }
 
 
-/* 게시판 테이블 */
-
 .Board_list {
     width: 100%;
+
     border-collapse: collapse;
     table-layout: fixed;
+
     border-top: 1px solid var(--color-border-strong);
     border-radius: .8rem;
     overflow: hidden;
@@ -99,14 +103,16 @@
 .Board_list td {
     height: 2.5rem;
     padding: 0 .55rem;
-    font-size: .82rem;
+
     border-bottom: 1px solid var(--color-border);
+
+    font-size: .82rem;
     vertical-align: middle;
 }
 
 .Board_list th {
-    font-weight: 700;
     text-align: center;
+    font-weight: 800;
     color: var(--color-text-main);
 }
 
@@ -114,9 +120,6 @@
     text-align: center;
     color: var(--color-text-sub);
 }
-
-
-/* 컬럼 너비 */
 
 .col_no {
     width: 8%;
@@ -139,8 +142,9 @@
     width: 12%;
 }
 
-
-/* 게시글 행 */
+.col_reaction {
+    width: 12%;
+}
 
 .post_item {
     cursor: pointer;
@@ -155,76 +159,92 @@
     color: var(--color-main);
 }
 
-
-/* 제목 / 뱃지 */
-
 .post_badge {
     display: inline-block;
     margin-right: .4rem;
     padding: .15rem .45rem;
+
     border-radius: 999px;
+
     background-color: var(--color-sub-light);
     color: var(--color-sub);
+
     font-size: .72rem;
-    font-weight: 600;
+    font-weight: 700;
     vertical-align: middle;
 }
 
 .post_title {
     display: inline-block;
     max-width: calc(100% - 4.5rem);
+
     overflow: hidden;
     white-space: nowrap;
     text-overflow: ellipsis;
+
     vertical-align: middle;
     color: var(--color-text-main);
 }
 
-/* 반응 */
-.col_reaction {
-    width: 12%;
-}
-
 .reaction_badge {
-    display: inline-flex;
-    justify-content: center;
-    align-items: center;
     min-width: 2.2rem;
     height: 1.45rem;
     padding: 0 .45rem;
+
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
     border-radius: 999px;
+
     background-color: var(--color-main-light);
     color: var(--color-main);
+
     font-size: .78rem;
-    font-weight: 700;
+    font-weight: 800;
 }
 
 .reaction_badge.read {
     background-color: #f7f2f5;
     color: var(--color-text-sub);
-    font-weight: 500;
+
+    font-size: .6rem;
+    font-weight: 600;
 }
 
-/* 페이지네이션 */
+.empty_result {
+    height: 12rem;
+
+    text-align: center !important;
+    color: var(--color-text-sub);
+
+    font-size: .9rem;
+}
 
 .Pagination {
+    margin-top: auto;
+    padding-top: .9rem;
+
     display: flex;
     justify-content: center;
     align-items: center;
     gap: .35rem;
-    margin-top: auto;
-    padding-top: .9rem;
+
     flex-shrink: 0;
 }
 
 .Pagination button {
     min-width: 2rem;
     height: 2rem;
+
     border: 1px solid var(--color-border);
     border-radius: 999px;
+
     background-color: white;
     color: var(--color-text-sub);
+
     font-size: .8rem;
+
     cursor: pointer;
     transition: .2s;
 }
@@ -238,10 +258,61 @@
     background-color: var(--color-main);
     border-color: var(--color-main);
     color: white;
-    font-weight: 700;
+
+    font-weight: 800;
 }
 
 .Pagination button:disabled {
     opacity: .35;
     cursor: default;
+}
+
+@media screen and (max-width: 1100px) {
+    .Board_list {
+        min-width: 450px;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .Board_wrap {
+        min-height: 420px;
+        padding: .9rem;
+        border-radius: 1rem;
+    }
+
+    .Board_title {
+        padding-bottom: .8rem;
+    }
+
+    .Board_title h2 {
+        font-size: 1.1rem;
+    }
+
+    .Board_title button {
+        padding: .45rem .75rem;
+        font-size: .78rem;
+    }
+
+    .Board_list th,
+    .Board_list td {
+        height: 2.35rem;
+        padding: 0 .45rem;
+        font-size: .76rem;
+    }
+
+    .post_badge {
+        font-size: .68rem;
+    }
+
+    .reaction_badge {
+        min-width: 2rem;
+        height: 1.35rem;
+        font-size: .72rem;
+    }
+
+    .Pagination button {
+        min-width: 1.85rem;
+        height: 1.85rem;
+        font-size: .74rem;
+    }
 }

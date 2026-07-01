@@ -55,5 +55,4 @@ function PostReaction({
         </div>
     )
 }
-
 export default PostReaction

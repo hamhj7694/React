@@ -1,24 +1,53 @@
-import Board from "../components/Board"
+import { useState, cloneElement, isValidElement } from "react"
 import "./Home.css"
 
-function Home(){
+import Menu from "../components/Menu"
+import Top from "../components/Top"
+import SummaryCards from "../components/SummaryCards"
+import Category from "../components/Category"
+import RecentFeed from "../components/RecentFeed"
+function Home({ children }){
+    const [searchKeyword, setSearchKeyword] = useState("")
+    const [selectedCategory, setSelectedCategory] = useState("전체")
+
     return(
         <div className="HomePage">
             <div className="Container">
-                <div className="Menu">메뉴</div>
+                <Menu />
 
                 <div className="Content">
-                    <div className="Header">
-                        <div className="Top">Top</div>
-                        <div className="Boxs">box 4개</div>
+                    <div className="Content_mid">
+                        <div className="Header">
+                            <Top 
+                                searchKeyword={searchKeyword}
+                                setSearchKeyword={setSearchKeyword}
+                            />
+
+                            <div className="Boxs"><SummaryCards/></div>
+                        </div>
+
+                        <div className="Main">
+                            <div className="Board">
+                                {isValidElement(children) 
+                                    ? cloneElement(children, { 
+                                        searchKeyword,
+                                        selectedCategory,
+                                    }) 
+                                    : children
+                                }
+                            </div>
+                        </div>
                     </div>
-
-                    <div className="Main">
-                        <div className="Board"><Board/></div>
-
-                        <div className="Board_info">
-                            <div className="Best_list">인기 게시물</div>
-                            <div className="Category">카테고리</div>
+                    
+                    <div className="Board_info">
+                        <div className="Category">
+                            <Category
+                                selectedCategory={selectedCategory}
+                                setSelectedCategory={setSelectedCategory}
+                            />
+                        </div>
+                        <div className="Best_list">
+                            <RecentFeed />
                         </div>
                     </div>
                 </div>
@@ -26,5 +55,4 @@ function Home(){
         </div>
     )
 }
-
 export default Home
