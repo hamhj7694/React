@@ -1,49 +1,17 @@
 import { useEffect, useRef, useState } from "react"
 import "./RecentFeed.css"
 
-const initialChatData = [
-    {
-        id: 1,
-        user: "나",
-        text: "모해 자기양?",
-        time: "21:10",
-    },
-    {
-        id: 2,
-        user: "너",
-        text: "아직 일하는 중..ㅠㅠ",
-        time: "21:12",
-    },
-    {
-        id: 3,
-        user: "나",
-        text: "끝나면 연락해!",
-        time: "21:13",
-    },
-    {
-        id: 4,
-        user: "너",
-        text: "웅 조금만 기다려줘",
-        time: "21:15",
-    },
-    {
-        id: 5,
-        user: "나",
-        text: "천천히 해도 돼!",
-        time: "21:16",
-    },
-]
-
-function RecentFeed(){
-    const [chatList, setChatList] = useState(initialChatData)
+function RecentFeed({ chatList, setChatList }){
     const [chatText, setChatText] = useState("")
+    const [selectedChatId, setSelectedChatId] = useState(null)
+    const [editingChatId, setEditingChatId] = useState(null)
 
-    const chatEndRef = useRef(null)
+    const chatBodyRef = useRef(null)
 
     useEffect(() => {
-        chatEndRef.current?.scrollIntoView({
-            behavior: "smooth",
-        })
+        if(!chatBodyRef.current) return
+
+        chatBodyRef.current.scrollTop = chatBodyRef.current.scrollHeight
     }, [chatList])
 
     const getNowTime = () => {
@@ -55,12 +23,68 @@ function RecentFeed(){
         })
     }
 
+    const handleChatClick = (chat) => {
+        if(chat.user !== "나") return
+
+        if(selectedChatId === chat.id){
+            setSelectedChatId(null)
+            return
+        }
+
+        setSelectedChatId(chat.id)
+    }
+
+    const handleDeleteChat = (chatId) => {
+        setChatList((prevChatList) => (
+            prevChatList.filter((chat) => chat.id !== chatId)
+        ))
+
+        if(selectedChatId === chatId){
+            setSelectedChatId(null)
+        }
+
+        if(editingChatId === chatId){
+            setEditingChatId(null)
+            setChatText("")
+        }
+    }
+
+    const handleEditStart = (chat) => {
+        setEditingChatId(chat.id)
+        setChatText(chat.text)
+        setSelectedChatId(null)
+    }
+
+    const handleEditCancel = () => {
+        setEditingChatId(null)
+        setChatText("")
+        setSelectedChatId(null)
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
 
         const trimmedText = chatText.trim()
 
         if(trimmedText === "") return
+
+        if(editingChatId){
+            setChatList((prevChatList) => (
+                prevChatList.map((chat) => (
+                    chat.id === editingChatId
+                        ? {
+                            ...chat,
+                            text: trimmedText,
+                            edited: true,
+                        }
+                        : chat
+                ))
+            ))
+
+            setEditingChatId(null)
+            setChatText("")
+            return
+        }
 
         const newChat = {
             id: Date.now(),
@@ -88,7 +112,7 @@ function RecentFeed(){
                 <span className="RecentChat_icon">💬</span>
             </div>
 
-            <div className="RecentChat_body">
+            <div className="RecentChat_body" ref={chatBodyRef}>
                 {chatList.map((chat) => (
                     <div 
                         className={
@@ -98,18 +122,52 @@ function RecentFeed(){
                         }
                         key={chat.id}
                     >
-                        <div className="RecentChat_bubble">
+                        <div 
+                            className={
+                                selectedChatId === chat.id
+                                    ? "RecentChat_bubble selected"
+                                    : "RecentChat_bubble"
+                            }
+                            onClick={() => handleChatClick(chat)}
+                        >
                             <div className="RecentChat_meta">
                                 <span>{chat.user}</span>
-                                <em>{chat.time}</em>
+
+                                <em>
+                                    {chat.time}
+                                    {chat.edited ? " · 수정됨" : ""}
+                                </em>
                             </div>
 
                             <p>{chat.text}</p>
+
+                            {chat.user === "나" && selectedChatId === chat.id && (
+                                <div className="RecentChat_actions">
+                                    <button 
+                                        type="button"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleEditStart(chat)
+                                        }}
+                                    >
+                                        수정
+                                    </button>
+
+                                    <button 
+                                        type="button"
+                                        className="delete"
+                                        onClick={(e) => {
+                                            e.stopPropagation()
+                                            handleDeleteChat(chat.id)
+                                        }}
+                                    >
+                                        삭제
+                                    </button>
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
-
-                <div ref={chatEndRef}></div>
             </div>
 
             <form className="RecentChat_form" onSubmit={handleSubmit}>
@@ -117,15 +175,24 @@ function RecentFeed(){
                     type="text"
                     value={chatText}
                     onChange={(e) => setChatText(e.target.value)}
-                    placeholder="메시지 입력"
+                    placeholder={editingChatId ? "메시지 수정 중" : "메시지 입력"}
                 />
 
+                {editingChatId && (
+                    <button 
+                        type="button"
+                        className="cancel"
+                        onClick={handleEditCancel}
+                    >
+                        취소
+                    </button>
+                )}
+
                 <button type="submit">
-                    보내기
+                    {editingChatId ? "수정" : "보내기"}
                 </button>
             </form>
         </div>
     )
 }
-
 export default RecentFeed

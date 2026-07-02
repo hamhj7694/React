@@ -1,7 +1,5 @@
 .RecentChat {
     width: 100%;
-    min-height: 310px;
-    max-height: 360px;
     padding: 1rem;
 
     display: flex;
@@ -14,9 +12,7 @@
     color: var(--color-text-main);
 }
 
-/* =========================
-    헤더
-========================= */
+/* 헤더 */
 
 .RecentChat_header {
     display: flex;
@@ -58,13 +54,11 @@
     box-shadow: 0 6px 14px rgba(255, 122, 174, 0.1);
 }
 
-/* =========================
-    채팅 목록
-========================= */
+/* 채팅 목록 */
 
 .RecentChat_body {
-    flex: 1;
-    min-height: 0;
+    height: 196px;
+    min-height: 190px;
     padding-right: .25rem;
 
     display: flex;
@@ -88,9 +82,7 @@
     background-color: transparent;
 }
 
-/* =========================
-    메시지
-========================= */
+/* 메시지 */
 
 .RecentChat_message {
     display: flex;
@@ -162,9 +154,7 @@
     word-break: keep-all;
 }
 
-/* =========================
-    입력창
-========================= */
+/* 입력창 */
 
 .RecentChat_form {
     display: flex;
@@ -224,6 +214,59 @@
 .RecentChat_form button:hover {
     background-color: var(--color-main-hover);
     transform: translateY(-1px);
+}
+
+/* 수정, 삭제 버튼 */
+.RecentChat_bubble {
+    cursor: default;
+}
+
+.RecentChat_message.mine .RecentChat_bubble {
+    cursor: pointer;
+}
+
+.RecentChat_bubble.selected {
+    box-shadow: 0 0 0 3px rgba(255, 122, 174, 0.18);
+}
+
+.RecentChat_actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: .35rem;
+
+    margin-top: .45rem;
+    padding-top: .4rem;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.RecentChat_actions button {
+    height: 1.55rem;
+    padding: 0 .55rem;
+
+    border: none;
+    border-radius: 999px;
+
+    background-color: rgba(255, 255, 255, 0.9);
+    color: var(--color-main);
+
+    font-size: .65rem;
+    font-weight: 800;
+
+    cursor: pointer;
+}
+
+.RecentChat_actions button.delete {
+    color: #ff4f78;
+}
+
+.RecentChat_form button.cancel {
+    background-color: #f7f2f5;
+    color: var(--color-text-sub);
+}
+
+.RecentChat_form button.cancel:hover {
+    background-color: #efe3ea;
 }
 
 /* =========================

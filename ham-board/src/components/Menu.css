@@ -197,9 +197,108 @@
 
 .Menu_today p {
     color: var(--color-text-main);
-    font-size: .78rem;
+    font-size: 1rem;
     line-height: 1.45;
     word-break: keep-all;
+}
+
+.Menu_today .Guide{
+    margin-top: .6rem;
+    font-size: .6rem;
+    color: gray;
+}
+
+.Menu_today {
+    position: relative;
+}
+
+.Menu_today_view {
+    width: 100%;
+    padding: 0;
+
+    border: none;
+    background: transparent;
+    color: inherit;
+
+    text-align: left;
+    cursor: pointer;
+}
+
+.Menu_today_view p {
+    margin: 0;
+}
+
+.Menu_today_panel {
+    margin-top: .65rem;
+    padding-top: .65rem;
+
+    border-top: 1px solid rgba(255, 122, 174, 0.16);
+}
+
+.Menu_today_actions {
+    display: flex;
+    gap: .45rem;
+}
+
+.Menu_today_actions button,
+.Menu_today_edit_buttons button {
+    height: 1.85rem;
+    padding: 0 .7rem;
+
+    border: none;
+    border-radius: 999px;
+
+    background-color: white;
+    color: var(--color-main);
+
+    font-size: .68rem;
+    font-weight: 800;
+
+    cursor: pointer;
+    transition: .2s;
+}
+
+.Menu_today_actions button:hover,
+.Menu_today_edit_buttons button:hover {
+    transform: translateY(-1px);
+    background-color: var(--color-main-light);
+}
+
+.Menu_today_edit {
+    display: flex;
+    flex-direction: column;
+    gap: .5rem;
+}
+
+.Menu_today_edit input {
+    width: 100%;
+    height: 2rem;
+    padding: 0 .75rem;
+
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    outline: none;
+
+    background-color: white;
+    color: var(--color-text-main);
+
+    font-size: .74rem;
+}
+
+.Menu_today_edit input:focus {
+    border-color: var(--color-main);
+    box-shadow: 0 0 0 3px rgba(255, 122, 174, 0.13);
+}
+
+.Menu_today_edit_buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: .4rem;
+}
+
+.Menu_today_edit_buttons button.cancel {
+    background-color: #f7f2f5;
+    color: var(--color-text-sub);
 }
 
 /* 모바일 */
@@ -236,6 +335,7 @@
 
     .Menu_nav {
         width: 100%;
+
         display: flex;
         flex-direction: row;
         gap: .6rem;
@@ -243,7 +343,9 @@
         overflow-x: auto;
         overflow-y: hidden;
 
-        padding: 0 .2rem .35rem;
+        padding-left: max(.8rem, calc((100% - 32.4rem) / 2));
+        padding-right: max(.8rem, calc((100% - 32.4rem) / 2));
+        padding-bottom: .35rem;
 
         scroll-snap-type: x proximity;
         -webkit-overflow-scrolling: touch;

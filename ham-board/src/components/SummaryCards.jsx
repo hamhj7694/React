@@ -3,27 +3,6 @@ import "./SummaryCards.css"
 
 const CURRENT_USER = "나"
 
-const chatData = [
-    {
-        id: 1,
-        sender: "나",
-        message: "모해 자기양?",
-        createdAt: "2025-05-30 21:10",
-    },
-    {
-        id: 2,
-        sender: "너",
-        message: "아직 일하는 중..ㅠㅠ",
-        createdAt: "2025-05-30 21:12",
-    },
-    {
-        id: 3,
-        sender: "나",
-        message: "끝나면 연락해!",
-        createdAt: "2025-05-30 21:13",
-    },
-]
-
 const scheduleData = [
     {
         id: 1,
@@ -42,15 +21,14 @@ const scheduleData = [
     },
 ]
 
-function SummaryCards(){
+function SummaryCards({ chatList = [] }){
     const totalRecordCount = postData.length
 
     const myRecordCount = postData.filter((post) => (
         post.writer === CURRENT_USER
     )).length
 
-    const chatCount = chatData.length
-
+    const chatCount = chatList.length
     const upcomingSchedule = scheduleData[0]
 
     return(
@@ -89,17 +67,29 @@ function SummaryCards(){
                 <div className="SummaryCard_icon schedule_icon">📅</div>
 
                 <div className="SummaryCard_text">
-                    <span className="SummaryCard_label">다음 약속</span>
+                    <span className="SummaryCard_label">다가오는 약속</span>
 
                     {upcomingSchedule ? (
                         <>
                             <strong>{upcomingSchedule.date}</strong>
                             <p>{upcomingSchedule.title}</p>
+
+                            <div className="Schedule_hover_panel">
+                                <span>다가오는 약속</span>
+                                <strong>{upcomingSchedule.date}</strong>
+                                <p>{upcomingSchedule.title}</p>
+                            </div>
                         </>
                     ) : (
                         <>
                             <strong>없음</strong>
                             <p>아직 등록된 약속이 없어요</p>
+
+                            <div className="Schedule_hover_panel">
+                                <span>다가오는 약속</span>
+                                <strong>없음</strong>
+                                <p>아직 등록된 약속이 없어요</p>
+                            </div>
                         </>
                     )}
                 </div>

@@ -1,20 +1,16 @@
 import { useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
-import { postData } from "../data/posts"
 import "./Board.css"
 
-function Board({ searchKeyword = "", selectedCategory = "전체" }){
+function Board({ searchKeyword = "", selectedCategory = "전체", posts = [] }){
     const navigate = useNavigate()
 
-    const [posts] = useState(postData)
     const [page, setPage] = useState(1)
 
     const postsPerPage = 8
 
-    // 검색어 정리
     const keyword = searchKeyword.trim().toLowerCase()
 
-    // 검색된 게시글 목록 / 카테고리 선택으로도 됨
     const filteredPosts = posts.filter((post) => {
         const isCategoryMatched = 
             selectedCategory === "전체" || post.category === selectedCategory
@@ -38,20 +34,18 @@ function Board({ searchKeyword = "", selectedCategory = "전체" }){
         )
     })
 
-    // 검색 결과 기준 페이지 계산
     const totalPage = Math.ceil(filteredPosts.length / postsPerPage)
 
     const startIndex = (page - 1) * postsPerPage
     const endIndex = startIndex + postsPerPage
     const currentPosts = filteredPosts.slice(startIndex, endIndex)
 
-    // 검색어가 바뀌면 1페이지로 이동
     useEffect(() => {
         setPage(1)
     }, [searchKeyword, selectedCategory])
 
     const handleWrite = () => {
-        alert("오늘 남기기 페이지로 이동 예정")
+        navigate("/write")
     }
 
     const goFirstPage = () => {
@@ -79,9 +73,9 @@ function Board({ searchKeyword = "", selectedCategory = "전체" }){
 
     return(
         <div className="Board_wrap">
-
             <div className="Board_title">
                 <h2>우리의 기록</h2>
+
                 <button type="button" onClick={handleWrite}>
                     + 함께 기록하기
                 </button>
@@ -104,38 +98,56 @@ function Board({ searchKeyword = "", selectedCategory = "전체" }){
                         {currentPosts.length === 0 ? (
                             <tr>
                                 <td colSpan="6" className="empty_result">
-                                    검색 결과가 없어요.
+                                    {posts.length === 0 
+                                        ? "아직 작성된 기억이 없어요." 
+                                        : "관련 기억이 없어요."
+                                    }
                                 </td>
                             </tr>
                         ) : (
-                            currentPosts.map((post) => (
-                                <tr 
-                                    className="post_item" 
-                                    key={post.id}
-                                    onClick={() => handlePostClick(post.id)}
-                                >
-                                    <td className="col_no">{post.id}</td>
+                            currentPosts.map((post, index) => {
+                                const displayNo = startIndex + index + 1
 
-                                    <td className="col_title">
-                                        <span className="post_badge">
-                                            {post.category}
-                                        </span>
+                                return(
+                                    <tr 
+                                        className="post_item" 
+                                        key={post.id}
+                                        onClick={() => handlePostClick(post.id)}
+                                    >
+                                        <td className="col_no">
+                                            {displayNo}
+                                        </td>
 
-                                        <span className="post_title">
-                                            {post.title}
-                                        </span>
-                                    </td>
+                                        <td className="col_title">
+                                            <span className="post_badge">
+                                                {post.category}
+                                            </span>
 
-                                    <td className="col_writer">{post.writer}</td>
-                                    <td className="col_date">{post.date}</td>
-                                    <td className="col_mood">{post.mood}</td>
-                                    <td className="col_reaction">
-                                        <span className={post.reaction === "읽음" ? "reaction_badge read" : "reaction_badge"}>
-                                            {post.reaction}
-                                        </span>
-                                    </td>
-                                </tr>
-                            ))
+                                            <span className="post_title">
+                                                {post.title}
+                                            </span>
+                                        </td>
+
+                                        <td className="col_writer">
+                                            {post.writer}
+                                        </td>
+
+                                        <td className="col_date">
+                                            {post.date}
+                                        </td>
+
+                                        <td className="col_mood">
+                                            {post.mood}
+                                        </td>
+
+                                        <td className="col_reaction">
+                                            <span className={post.reaction === "읽음" ? "reaction_badge read" : "reaction_badge"}>
+                                                {post.reaction}
+                                            </span>
+                                        </td>
+                                    </tr>
+                                )
+                            })
                         )}
                     </tbody>
                 </table>
@@ -190,4 +202,5 @@ function Board({ searchKeyword = "", selectedCategory = "전체" }){
         </div>
     )
 }
+
 export default Board

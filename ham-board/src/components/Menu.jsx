@@ -2,42 +2,12 @@ import { useRef, useState } from "react"
 import "./Menu.css"
 
 const menuItems = [
-    {
-        id: 1,
-        name: "우리 홈",
-        path: "/",
-        icon: "🏠",
-    },
-    {
-        id: 2,
-        name: "포스트",
-        path: "/",
-        icon: "📓",
-    },
-    {
-        id: 3,
-        name: "갤러리",
-        path: "/gallery",
-        icon: "🖼️",
-    },
-    {
-        id: 4,
-        name: "캘린더",
-        path: "/calendar",
-        icon: "📅",
-    },
-    {
-        id: 5,
-        name: "채팅",
-        path: "/chat",
-        icon: "💬",
-    },
-    {
-        id: 6,
-        name: "설정",
-        path: "/setting",
-        icon: "⚙️",
-    },
+    { id: 1, name: "우리 홈", path: "/", icon: "🏠" },
+    { id: 2, name: "포스트", path: "/", icon: "📓" },
+    { id: 3, name: "갤러리", path: "/gallery", icon: "🖼️" },
+    { id: 4, name: "캘린더", path: "/calendar", icon: "📅" },
+    { id: 5, name: "채팅", path: "/chat", icon: "💬" },
+    { id: 6, name: "설정", path: "/setting", icon: "⚙️" },
 ]
 
 const todayMessages = [
@@ -55,7 +25,6 @@ const todayMessages = [
 
 const getTodayKey = () => {
     const today = new Date()
-
     const year = today.getFullYear()
     const month = String(today.getMonth() + 1).padStart(2, "0")
     const date = String(today.getDate()).padStart(2, "0")
@@ -65,13 +34,11 @@ const getTodayKey = () => {
 
 const getRandomMessage = () => {
     const randomIndex = Math.floor(Math.random() * todayMessages.length)
-
     return todayMessages[randomIndex]
 }
 
 const getTodayMessage = () => {
     const todayKey = getTodayKey()
-
     const savedData = JSON.parse(localStorage.getItem("todayMessageData"))
 
     if(savedData && savedData.date === todayKey){
@@ -85,6 +52,7 @@ const getTodayMessage = () => {
         JSON.stringify({
             date: todayKey,
             message: newMessage,
+            type: "random",
         })
     )
 
@@ -98,7 +66,10 @@ function Menu(){
     const [startX, setStartX] = useState(0)
     const [scrollLeft, setScrollLeft] = useState(0)
 
-    const [todayMessage] = useState(getTodayMessage)
+    const [todayMessage, setTodayMessage] = useState(getTodayMessage)
+    const [isTodayMenuOpen, setIsTodayMenuOpen] = useState(false)
+    const [isEditingTodayMessage, setIsEditingTodayMessage] = useState(false)
+    const [editMessage, setEditMessage] = useState(todayMessage)
 
     const handleMouseDown = (e) => {
         if(!navRef.current) return
@@ -127,6 +98,57 @@ function Menu(){
         setIsDragging(false)
     }
 
+    const saveTodayMessage = (message, type = "custom") => {
+        const todayKey = getTodayKey()
+
+        localStorage.setItem(
+            "todayMessageData",
+            JSON.stringify({
+                date: todayKey,
+                message,
+                type,
+            })
+        )
+
+        setTodayMessage(message)
+    }
+
+    const handleRandomMessage = () => {
+        let newMessage = getRandomMessage()
+
+        if(todayMessages.length > 1){
+            while(newMessage === todayMessage){
+                newMessage = getRandomMessage()
+            }
+        }
+
+        saveTodayMessage(newMessage, "random")
+        setEditMessage(newMessage)
+        setIsEditingTodayMessage(false)
+    }
+
+    const handleEditStart = () => {
+        setEditMessage(todayMessage)
+        setIsEditingTodayMessage(true)
+    }
+
+    const handleEditCancel = () => {
+        setEditMessage(todayMessage)
+        setIsEditingTodayMessage(false)
+    }
+
+    const handleEditSubmit = (e) => {
+        e.preventDefault()
+
+        const trimmedMessage = editMessage.trim()
+
+        if(trimmedMessage === "") return
+
+        saveTodayMessage(trimmedMessage, "custom")
+        setIsEditingTodayMessage(false)
+        setIsTodayMenuOpen(false)
+    }
+
     return(
         <aside className="Menu">
             <div className="Menu_logo">
@@ -151,31 +173,75 @@ function Menu(){
                         className="Menu_item"
                         key={item.id}
                     >
-                        <span className="Menu_icon">
-                            {item.icon}
-                        </span>
+                        <span className="Menu_icon">{item.icon}</span>
 
                         <span className="Menu_text_wrap">
-                            <span className="Menu_text">
-                                {item.name}
-                            </span>
-
-                            {item.desc && (
-                                <span className="Menu_desc">
-                                    {item.desc}
-                                </span>
-                            )}
+                            <span className="Menu_text">{item.name}</span>
                         </span>
                     </button>
                 ))}
             </nav>
 
             <div className="Menu_today">
-                <span className="Menu_today_label">오늘의 멘트</span>
-                <p>“{todayMessage}”</p>
+                <button
+                    type="button"
+                    className="Menu_today_view"
+                    onClick={() => setIsTodayMenuOpen(!isTodayMenuOpen)}
+                >
+                    <span className="Menu_today_label">오늘의 멘트</span>
+                    <p>{todayMessage}</p>
+                    <p className="Guide">👆클릭해서 변경</p>
+                </button>
+
+                {isTodayMenuOpen && (
+                    <div className="Menu_today_panel">
+                        {!isEditingTodayMessage ? (
+                            <div className="Menu_today_actions">
+                                <button 
+                                    type="button"
+                                    onClick={handleRandomMessage}
+                                >
+                                    랜덤 멘트
+                                </button>
+
+                                <button 
+                                    type="button"
+                                    onClick={handleEditStart}
+                                >
+                                    수정
+                                </button>
+                            </div>
+                        ) : (
+                            <form 
+                                className="Menu_today_edit"
+                                onSubmit={handleEditSubmit}
+                            >
+                                <input 
+                                    type="text"
+                                    value={editMessage}
+                                    onChange={(e) => setEditMessage(e.target.value)}
+                                    placeholder="오늘의 멘트 입력"
+                                />
+
+                                <div className="Menu_today_edit_buttons">
+                                    <button type="submit">
+                                        저장
+                                    </button>
+
+                                    <button 
+                                        type="button"
+                                        className="cancel"
+                                        onClick={handleEditCancel}
+                                    >
+                                        취소
+                                    </button>
+                                </div>
+                            </form>
+                        )}
+                    </div>
+                )}
             </div>
         </aside>
     )
 }
-
 export default Menu
