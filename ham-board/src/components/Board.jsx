@@ -42,7 +42,7 @@ function Board({ searchKeyword = "", selectedCategory = "전체", posts = [] }){
 
     useEffect(() => {
         setPage(1)
-    }, [searchKeyword, selectedCategory])
+    }, [searchKeyword, selectedCategory, posts.length])
 
     const handleWrite = () => {
         navigate("/write")
@@ -65,6 +65,35 @@ function Board({ searchKeyword = "", selectedCategory = "전체", posts = [] }){
     const goNextPage = () => {
         if(page === totalPage || totalPage === 0) return
         setPage(page + 1)
+    }
+
+    const PARTNER = "너"
+
+    const getReactionDisplay = (post) => {
+        const partnerReactionLog = post.reactions?.find((log) => (
+            log.nickname === PARTNER
+        ))
+
+        if(!partnerReactionLog){
+            return "읽음"
+        }
+
+        const word = partnerReactionLog.word?.trim() || ""
+
+        if(word.length >= 3) return "💬"
+        if(word.length >= 1) return word
+
+        return partnerReactionLog.reaction || "읽음"
+    }
+    
+    const getCategoryClass = (category) => {
+        if(category === "데이트") return "date"
+        if(category === "일상") return "daily"
+        if(category === "마음") return "heart"
+        if(category === "여행") return "travel"
+        if(category === "약속") return "promise"
+
+        return "all"
     }
 
     const handlePostClick = (postId) => {
@@ -119,7 +148,7 @@ function Board({ searchKeyword = "", selectedCategory = "전체", posts = [] }){
                                         </td>
 
                                         <td className="col_title">
-                                            <span className="post_badge">
+                                            <span className={`post_badge ${getCategoryClass(post.category)}`}>
                                                 {post.category}
                                             </span>
 
@@ -141,8 +170,8 @@ function Board({ searchKeyword = "", selectedCategory = "전체", posts = [] }){
                                         </td>
 
                                         <td className="col_reaction">
-                                            <span className={post.reaction === "읽음" ? "reaction_badge read" : "reaction_badge"}>
-                                                {post.reaction}
+                                            <span className={getReactionDisplay(post) === "읽음" ? "reaction_badge read" : "reaction_badge"}>
+                                                {getReactionDisplay(post)}
                                             </span>
                                         </td>
                                     </tr>

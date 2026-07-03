@@ -2,13 +2,16 @@ import { useState } from "react"
 import { useNavigate, useParams } from "react-router-dom"
 import "./PostDetail.css"
 import PostReaction from "../components/PostReaction"
+import ImageViewer from "../components/ImageViewer"
+import PostWriteImage from "../components/PostWrite/PostWriteImage"
+import ScheduleSection from "../components/PostWrite/ScheduleSection"
 
 const CURRENT_USER = "나"
 const PARTNER = "너"
 
 const reactionOptions = ["💗", "🥰", "🥺", "😂", "✨", "🫶"]
 
-const categoryList = ["데이트", "일상", "마음", "여행", "추억", "약속"]
+const categoryList = ["데이트", "일상", "마음", "여행", "약속"]
 
 const moodList = [
     "행복",
@@ -22,6 +25,14 @@ const moodList = [
     "기대",
 ]
 
+const createImageId = () => {
+    if(window.crypto?.randomUUID){
+        return crypto.randomUUID()
+    }
+
+    return `${Date.now()}-${Math.random()}`
+}
+
 function PostDetail({ posts = [], setPosts }){
     const { id } = useParams()
     const navigate = useNavigate()
@@ -32,10 +43,20 @@ function PostDetail({ posts = [], setPosts }){
     const [wordText, setWordText] = useState("")
 
     const [isEditing, setIsEditing] = useState(false)
+    const [selectedImage, setSelectedImage] = useState(null)
     const [editTitle, setEditTitle] = useState(post?.title || "")
     const [editCategory, setEditCategory] = useState(post?.category || "데이트")
     const [editMood, setEditMood] = useState(post?.mood || "행복")
     const [editContent, setEditContent] = useState(post?.content || "")
+    const [editImages, setEditImages] = useState(post?.images || [])
+
+    const [editScheduleTitle, setEditScheduleTitle] = useState(post?.schedule?.title || post?.title || "")
+    const [editScheduleDate, setEditScheduleDate] = useState(post?.schedule?.date || "")
+    const [editScheduleTime, setEditScheduleTime] = useState(post?.schedule?.time || "")
+    const [editSchedulePlace, setEditSchedulePlace] = useState(post?.schedule?.place || "")
+    const [editScheduleMemo, setEditScheduleMemo] = useState(post?.schedule?.memo || "")
+
+    const isEditSchedulePost = editCategory === "약속"
 
     if(!post){
         return(
@@ -54,6 +75,8 @@ function PostDetail({ posts = [], setPosts }){
             </div>
         )
     }
+
+    const isOriginalSchedulePost = post.category === "약속"
 
     const getNowText = () => {
         const now = new Date()
@@ -89,6 +112,31 @@ function PostDetail({ posts = [], setPosts }){
         return reactionLog.reaction || "읽음"
     }
 
+    const updateReactionLogs = (newLog) => {
+        setReactionLogs((prevLogs) => {
+            const filteredLogs = prevLogs.filter(
+                (log) => log.nickname !== CURRENT_USER
+            )
+
+            const updatedLogs = [newLog, ...filteredLogs]
+
+            if(setPosts){
+                setPosts((prevPosts) => (
+                    prevPosts.map((item) => (
+                        item.id === post.id
+                            ? {
+                                ...item,
+                                reactions: updatedLogs,
+                            }
+                            : item
+                    ))
+                ))
+            }
+
+            return updatedLogs
+        })
+    }
+
     const handleReactionClick = (selectedReaction) => {
         const newLog = {
             nickname: CURRENT_USER,
@@ -97,13 +145,7 @@ function PostDetail({ posts = [], setPosts }){
             reactedAt: getNowText(),
         }
 
-        setReactionLogs((prevLogs) => {
-            const filteredLogs = prevLogs.filter(
-                (log) => log.nickname !== CURRENT_USER
-            )
-
-            return [newLog, ...filteredLogs]
-        })
+        updateReactionLogs(newLog)
     }
 
     const handleWordSubmit = (e) => {
@@ -120,13 +162,7 @@ function PostDetail({ posts = [], setPosts }){
             reactedAt: getNowText(),
         }
 
-        setReactionLogs((prevLogs) => {
-            const filteredLogs = prevLogs.filter(
-                (log) => log.nickname !== CURRENT_USER
-            )
-
-            return [newLog, ...filteredLogs]
-        })
+        updateReactionLogs(newLog)
 
         setWordText("")
     }
@@ -136,6 +172,14 @@ function PostDetail({ posts = [], setPosts }){
         setEditCategory(post.category)
         setEditMood(post.mood)
         setEditContent(post.content)
+        setEditImages(post.images || [])
+
+        setEditScheduleTitle(post.schedule?.title || post.title || "")
+        setEditScheduleDate(post.schedule?.date || "")
+        setEditScheduleTime(post.schedule?.time || "")
+        setEditSchedulePlace(post.schedule?.place || "")
+        setEditScheduleMemo(post.schedule?.memo || "")
+
         setIsEditing(true)
     }
 
@@ -144,21 +188,110 @@ function PostDetail({ posts = [], setPosts }){
         setEditCategory(post.category)
         setEditMood(post.mood)
         setEditContent(post.content)
+        setEditImages(post.images || [])
+
+        setEditScheduleTitle(post.schedule?.title || post.title || "")
+        setEditScheduleDate(post.schedule?.date || "")
+        setEditScheduleTime(post.schedule?.time || "")
+        setEditSchedulePlace(post.schedule?.place || "")
+        setEditScheduleMemo(post.schedule?.memo || "")
+
         setIsEditing(false)
     }
 
+    const handleEditCategoryClick = (selectedCategory) => {
+        if(isOriginalSchedulePost){
+            return
+        }
+
+        setEditCategory(selectedCategory)
+
+        if(selectedCategory === "약속"){
+            setEditScheduleTitle(post.schedule?.title || editTitle || post.title || "")
+            setEditScheduleDate(post.schedule?.date || "")
+            setEditScheduleTime(post.schedule?.time || "")
+            setEditSchedulePlace(post.schedule?.place || "")
+            setEditScheduleMemo(post.schedule?.memo || "")
+            return
+        }
+
+        setEditScheduleTitle("")
+        setEditScheduleDate("")
+        setEditScheduleTime("")
+        setEditSchedulePlace("")
+        setEditScheduleMemo("")
+    }
+
+    const handleEditImageChange = (e) => {
+        const files = Array.from(e.target.files)
+
+        if(files.length === 0) return
+
+        const newImages = files.map((file) => ({
+            id: createImageId(),
+            file,
+            name: file.name,
+            url: URL.createObjectURL(file),
+        }))
+
+        setEditImages((prevImages) => [
+            ...prevImages,
+            ...newImages,
+        ])
+
+        e.target.value = ""
+    }
+
+    const handleRemoveEditImage = (imageId) => {
+        const targetImage = editImages.find((image) => image.id === imageId)
+
+        if(targetImage?.file && targetImage?.url){
+            URL.revokeObjectURL(targetImage.url)
+        }
+
+        setEditImages((prevImages) => (
+            prevImages.filter((image) => image.id !== imageId)
+        ))
+    }
+        
     const handleEditSave = () => {
-        const trimmedTitle = editTitle.trim()
+        const fixedEditCategory = isOriginalSchedulePost
+            ? "약속"
+            : editCategory
+
+        const isFixedSchedulePost = fixedEditCategory === "약속"
+
+        const trimmedTitle = isFixedSchedulePost
+            ? editScheduleTitle.trim()
+            : editTitle.trim()
+
         const trimmedContent = editContent.trim()
 
-        if(trimmedTitle === ""){
+        if(!isFixedSchedulePost && trimmedTitle === ""){
             alert("제목을 입력해줘!")
             return
         }
 
-        if(trimmedContent === ""){
+        if(!isFixedSchedulePost && trimmedContent === ""){
             alert("내용을 입력해줘!")
             return
+        }
+
+        if(isFixedSchedulePost){
+            if(editScheduleTitle.trim() === ""){
+                alert("약속 제목을 입력해줘!")
+                return
+            }
+
+            if(editScheduleDate === ""){
+                alert("약속 날짜를 선택해줘!")
+                return
+            }
+
+            if(editScheduleTime === ""){
+                alert("약속 시간을 선택해줘!")
+                return
+            }
         }
 
         if(!setPosts){
@@ -166,15 +299,42 @@ function PostDetail({ posts = [], setPosts }){
             return
         }
 
+        const scheduleContent = isFixedSchedulePost
+            ? [
+                editScheduleTitle.trim(),
+                `${editScheduleDate} ${editScheduleTime}`,
+                editSchedulePlace.trim() ? `장소: ${editSchedulePlace.trim()}` : "",
+                editScheduleMemo.trim() ? `메모: ${editScheduleMemo.trim()}` : "",
+            ]
+                .filter(Boolean)
+                .join("\n")
+            : trimmedContent
+
         setPosts((prevPosts) => (
             prevPosts.map((item) => (
                 item.id === post.id
                     ? {
                         ...item,
                         title: trimmedTitle,
-                        category: editCategory,
+                        category: fixedEditCategory,
                         mood: editMood,
-                        content: trimmedContent,
+                        content: scheduleContent,
+                        images: editImages.map((image) => ({
+                            id: image.id,
+                            url: image.url,
+                            name: image.name,
+                        })),
+                        schedule: isFixedSchedulePost
+                            ? {
+                                id: item.schedule?.id || item.id,
+                                postId: item.id,
+                                title: editScheduleTitle.trim(),
+                                date: editScheduleDate,
+                                time: editScheduleTime,
+                                place: editSchedulePlace.trim(),
+                                memo: editScheduleMemo.trim(),
+                            }
+                            : null,
                     }
                     : item
             ))
@@ -210,34 +370,43 @@ function PostDetail({ posts = [], setPosts }){
                             <div className="PostDetail_edit_group">
                                 <label>카테고리</label>
 
-                                <div className="PostDetail_chip_group">
-                                    {categoryList.map((category) => (
-                                        <button
-                                            type="button"
-                                            key={category}
-                                            className={
-                                                editCategory === category
-                                                    ? "PostDetail_chip active"
-                                                    : "PostDetail_chip"
-                                            }
-                                            onClick={() => setEditCategory(category)}
-                                        >
-                                            {category}
-                                        </button>
-                                    ))}
+                                {isOriginalSchedulePost ? (
+                                    <div className="PostDetail_locked_category">
+                                        <span>약속</span>
+                                        <p>약속 글은 카테고리를 변경할 수 없어요.</p>
+                                    </div>
+                                ) : (
+                                    <div className="PostDetail_chip_group">
+                                        {categoryList.map((category) => (
+                                            <button
+                                                type="button"
+                                                key={category}
+                                                className={
+                                                    editCategory === category
+                                                        ? "PostDetail_chip active"
+                                                        : "PostDetail_chip"
+                                                }
+                                                onClick={() => handleEditCategoryClick(category)}
+                                            >
+                                                {category}
+                                            </button>
+                                        ))}
+                                    </div>
+                                )}
+                            </div>
+
+                            {!isEditSchedulePost && (
+                                <div className="PostDetail_edit_group">
+                                    <label>제목</label>
+
+                                    <input
+                                        type="text"
+                                        className="PostDetail_edit_title"
+                                        value={editTitle}
+                                        onChange={(e) => setEditTitle(e.target.value)}
+                                    />
                                 </div>
-                            </div>
-
-                            <div className="PostDetail_edit_group">
-                                <label>제목</label>
-
-                                <input
-                                    type="text"
-                                    className="PostDetail_edit_title"
-                                    value={editTitle}
-                                    onChange={(e) => setEditTitle(e.target.value)}
-                                />
-                            </div>
+                            )}
                         </>
                     ) : (
                         <>
@@ -285,18 +454,33 @@ function PostDetail({ posts = [], setPosts }){
                 </div>
 
                 {isEditing ? (
-                    <div className="PostDetail_edit_content">
-                        <label>내용</label>
-
-                        <textarea
-                            value={editContent}
-                            onChange={(e) => setEditContent(e.target.value)}
+                    isEditSchedulePost ? (
+                        <ScheduleSection
+                            scheduleTitle={editScheduleTitle}
+                            setScheduleTitle={setEditScheduleTitle}
+                            scheduleDate={editScheduleDate}
+                            setScheduleDate={setEditScheduleDate}
+                            scheduleTime={editScheduleTime}
+                            setScheduleTime={setEditScheduleTime}
+                            schedulePlace={editSchedulePlace}
+                            setSchedulePlace={setEditSchedulePlace}
+                            scheduleMemo={editScheduleMemo}
+                            setScheduleMemo={setEditScheduleMemo}
                         />
+                    ) : (
+                        <div className="PostDetail_edit_content">
+                            <label>내용</label>
 
-                        <div className="PostDetail_edit_count">
-                            {editContent.length}자
+                            <textarea
+                                value={editContent}
+                                onChange={(e) => setEditContent(e.target.value)}
+                            />
+
+                            <div className="PostDetail_edit_count">
+                                {editContent.length}자
+                            </div>
                         </div>
-                    </div>
+                    )
                 ) : (
                     <div className="PostDetail_content">
                         {post.content.split("\n").map((line, index) => (
@@ -305,14 +489,27 @@ function PostDetail({ posts = [], setPosts }){
                     </div>
                 )}
 
-                {post.images && post.images.length > 0 && (
-                    <div className="PostDetail_images">
-                        {post.images.map((image) => (
-                            <div className="PostDetail_image_item" key={image.id}>
-                                <img src={image.url} alt={image.name} />
-                            </div>
-                        ))}
-                    </div>
+                {isEditing ? (
+                    <PostWriteImage
+                        images={editImages}
+                        handleImageChange={handleEditImageChange}
+                        handleRemoveImage={handleRemoveEditImage}
+                    />
+                ) : (
+                    post.images && post.images.length > 0 && (
+                        <div className="PostDetail_images">
+                            {post.images.map((image) => (
+                                <button 
+                                    type="button"
+                                    className="PostDetail_image_item" 
+                                    key={image.id}
+                                    onClick={() => setSelectedImage(image)}
+                                >
+                                    <img src={image.url} alt={image.name || "게시글 이미지"} />
+                                </button>
+                            ))}
+                        </div>
+                    )
                 )}
 
                 {!isEditing && (
@@ -330,13 +527,15 @@ function PostDetail({ posts = [], setPosts }){
                 )}
 
                 <div className="PostDetail_actions">
-                    <button 
-                        type="button" 
-                        className="Back_button"
-                        onClick={() => navigate("/")}
-                    >
-                        목록으로 돌아가기
-                    </button>
+                    {!isEditing && (
+                        <button 
+                            type="button" 
+                            className="Back_button"
+                            onClick={() => navigate("/")}
+                        >
+                            목록으로 돌아가기
+                        </button>
+                    )}
 
                     {isEditing ? (
                         <>
@@ -376,7 +575,13 @@ function PostDetail({ posts = [], setPosts }){
                         </>
                     )}
                 </div>
+
             </div>
+
+            <ImageViewer
+                image={selectedImage}
+                onClose={() => setSelectedImage(null)}
+            />
         </div>
     )
 }

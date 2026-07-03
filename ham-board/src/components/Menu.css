@@ -57,7 +57,7 @@
 }
 
 .Menu_logo_text p {
-    margin-top: .2rem;
+    margin-bottom: .2rem;
     font-size: .68rem;
     color: var(--color-text-sub);
     letter-spacing: .03em;
@@ -414,5 +414,6 @@
 
     .Menu_today p {
         font-size: .74rem;
+        font-size: .85rem;
     }
 }

@@ -1,4 +1,3 @@
-import { postData } from "../data/posts"
 import "./Category.css"
 
 const categoryList = [
@@ -29,18 +28,18 @@ const categoryList = [
     },
     {
         id: 6,
-        name: "추억",
-        color: "memory",
+        name: "약속",
+        color: "promise",
     },
 ]
 
-function Category({ selectedCategory, setSelectedCategory }){
+function Category({ posts = [], selectedCategory, setSelectedCategory }){
     const getCategoryCount = (categoryName) => {
         if(categoryName === "전체"){
-            return postData.length
+            return posts.length
         }
 
-        return postData.filter((post) => post.category === categoryName).length
+        return posts.filter((post) => post.category === categoryName).length
     }
 
     const handleCategoryClick = (categoryName) => {
@@ -72,6 +71,7 @@ function Category({ selectedCategory, setSelectedCategory }){
                         >
                             <div className="Category_name_wrap">
                                 <span className={`Category_dot ${category.color}`}></span>
+
                                 <span className="Category_name">
                                     {category.name}
                                 </span>
@@ -87,4 +87,5 @@ function Category({ selectedCategory, setSelectedCategory }){
         </div>
     )
 }
+
 export default Category

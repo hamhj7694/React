@@ -1,19 +1,12 @@
 import { useState } from "react"
+import ImageViewer from "../ImageViewer"
 
 function PostWriteImage({
-    images,
+    images = [],
     handleImageChange,
     handleRemoveImage,
 }){
     const [selectedImage, setSelectedImage] = useState(null)
-
-    const handleImageClick = (image) => {
-        setSelectedImage(image)
-    }
-
-    const handleClosePreview = () => {
-        setSelectedImage(null)
-    }
 
     return(
         <>
@@ -38,9 +31,12 @@ function PostWriteImage({
                                 <button
                                     type="button"
                                     className="PostWrite_image_thumb"
-                                    onClick={() => handleImageClick(image)}
+                                    onClick={() => setSelectedImage(image)}
                                 >
-                                    <img src={image.url} alt={image.name} />
+                                    <img 
+                                        src={image.url} 
+                                        alt={image.name || "업로드 이미지"} 
+                                    />
                                 </button>
 
                                 <button
@@ -56,32 +52,10 @@ function PostWriteImage({
                 )}
             </div>
 
-            {selectedImage && (
-                <div 
-                    className="PostWrite_image_overlay"
-                    onClick={handleClosePreview}
-                >
-                    <div 
-                        className="PostWrite_image_modal"
-                        onClick={(e) => e.stopPropagation()}
-                    >
-                        <button
-                            type="button"
-                            className="PostWrite_image_close"
-                            onClick={handleClosePreview}
-                        >
-                            ×
-                        </button>
-
-                        <img 
-                            src={selectedImage.url} 
-                            alt={selectedImage.name} 
-                        />
-
-                        <p>{selectedImage.name}</p>
-                    </div>
-                </div>
-            )}
+            <ImageViewer
+                image={selectedImage}
+                onClose={() => setSelectedImage(null)}
+            />
         </>
     )
 }

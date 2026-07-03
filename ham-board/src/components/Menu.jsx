@@ -1,4 +1,5 @@
 import { useRef, useState } from "react"
+import { useNavigate } from "react-router-dom"
 import "./Menu.css"
 
 const menuItems = [
@@ -60,6 +61,7 @@ const getTodayMessage = () => {
 }
 
 function Menu(){
+    const navigate = useNavigate()
     const navRef = useRef(null)
 
     const [isDragging, setIsDragging] = useState(false)
@@ -96,6 +98,10 @@ function Menu(){
 
     const handleMouseLeave = () => {
         setIsDragging(false)
+    }
+
+    const handleMenuClick = (path) => {
+        navigate(path)
     }
 
     const saveTodayMessage = (message, type = "custom") => {
@@ -155,7 +161,8 @@ function Menu(){
                 <div className="Menu_logo_icon">♡</div>
 
                 <div className="Menu_logo_text">
-                    <h1>우리 공간</h1>
+                    <p>우리 같이</p>
+                    <h1>커플로그</h1>
                 </div>
             </div>
 
@@ -172,6 +179,7 @@ function Menu(){
                         type="button"
                         className="Menu_item"
                         key={item.id}
+                        onClick={() => handleMenuClick(item.path)}
                     >
                         <span className="Menu_icon">{item.icon}</span>
 
@@ -190,7 +198,7 @@ function Menu(){
                 >
                     <span className="Menu_today_label">오늘의 멘트</span>
                     <p>{todayMessage}</p>
-                    <p className="Guide">👆클릭해서 변경</p>
+                    <p className="Guide">👆클릭해서 변경</p> 
                 </button>
 
                 {isTodayMenuOpen && (
@@ -244,4 +252,5 @@ function Menu(){
         </aside>
     )
 }
+
 export default Menu

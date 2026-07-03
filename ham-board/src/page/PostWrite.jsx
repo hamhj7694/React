@@ -1,13 +1,14 @@
 import { useState } from "react"
 import { useNavigate } from "react-router-dom"
 import "./PostWrite.css"
+
 import PostWriteHeader from "../components/PostWrite/PostWriteHeader"
 import CategoryMoodSection from "../components/PostWrite/CategoryMoodSection"
 import TitleSection from "../components/PostWrite/TitleSection"
 import ScheduleSection from "../components/PostWrite/ScheduleSection"
 import PostWriteImage from "../components/PostWrite/PostWriteImage"
 
-const categoryList = ["데이트", "일상", "마음", "여행", "추억", "약속"]
+const categoryList = ["데이트", "일상", "마음", "여행", "약속"]
 
 const moodList = [
     "행복",
@@ -121,10 +122,13 @@ function PostWrite({ setPosts }){
     const handleSubmit = (e) => {
         e.preventDefault()
 
-        const trimmedTitle = title.trim()
+        const trimmedTitle = isSchedulePost
+            ? scheduleTitle.trim()
+            : title.trim()
+
         const trimmedContent = content.trim()
 
-        if(trimmedTitle === ""){
+        if(!isSchedulePost && trimmedTitle === ""){
             alert("제목을 입력해줘!")
             return
         }
@@ -232,10 +236,12 @@ function PostWrite({ setPosts }){
                     />
                 </div>
 
-                <TitleSection
-                    title={title}
-                    setTitle={setTitle}
-                />
+                {!isSchedulePost && (
+                    <TitleSection
+                        title={title}
+                        setTitle={setTitle}
+                    />
+                )}
 
                 {isSchedulePost && (
                     <ScheduleSection
@@ -264,7 +270,7 @@ function PostWrite({ setPosts }){
                         />
 
                         <div className="PostWrite_count">
-                            {content.length}
+                            {content.length}자
                         </div>
                     </div>
                 )}
@@ -295,4 +301,5 @@ function PostWrite({ setPosts }){
         </div>
     )
 }
+
 export default PostWrite

@@ -1,35 +1,48 @@
-import { postData } from "../data/posts"
 import "./SummaryCards.css"
 
 const CURRENT_USER = "나"
 
-const scheduleData = [
-    {
-        id: 1,
-        title: "성수동 카페 데이트",
-        date: "06월 02일",
-    },
-    {
-        id: 2,
-        title: "영화 보기",
-        date: "06월 08일",
-    },
-    {
-        id: 3,
-        title: "강릉 여행",
-        date: "07월 12일",
-    },
-]
+const getScheduleDateTime = (schedule) => {
+    if(!schedule?.date) return null
 
-function SummaryCards({ chatList = [] }){
-    const totalRecordCount = postData.length
+    const time = schedule.time || "00:00"
 
-    const myRecordCount = postData.filter((post) => (
+    return new Date(`${schedule.date}T${time}`)
+}
+
+const getUpcomingSchedule = (posts) => {
+    const now = new Date()
+
+    const schedules = posts
+        .filter((post) => post.schedule)
+        .map((post) => ({
+            ...post.schedule,
+            postId: post.id,
+            postTitle: post.title,
+        }))
+        .filter((schedule) => {
+            const scheduleDateTime = getScheduleDateTime(schedule)
+
+            if(!scheduleDateTime) return false
+
+            return scheduleDateTime >= now
+        })
+        .sort((a, b) => (
+            getScheduleDateTime(a) - getScheduleDateTime(b)
+        ))
+
+    return schedules[0]
+}
+
+function SummaryCards({ posts = [], chatList = [] }){
+    const totalRecordCount = posts.length
+
+    const myRecordCount = posts.filter((post) => (
         post.writer === CURRENT_USER
     )).length
 
     const chatCount = chatList.length
-    const upcomingSchedule = scheduleData[0]
+    const upcomingSchedule = getUpcomingSchedule(posts)
 
     return(
         <div className="SummaryCards">
@@ -49,7 +62,7 @@ function SummaryCards({ chatList = [] }){
                 <div className="SummaryCard_text">
                     <span className="SummaryCard_label">내 기록</span>
                     <strong>{myRecordCount}</strong>
-                    <p>내 쓴 기록</p>
+                    <p>내가 쓴 기록</p>
                 </div>
             </div>
 
@@ -71,13 +84,26 @@ function SummaryCards({ chatList = [] }){
 
                     {upcomingSchedule ? (
                         <>
-                            <strong>{upcomingSchedule.date}</strong>
+                            <strong>
+                                {upcomingSchedule.date}
+                                {upcomingSchedule.time ? ` ${upcomingSchedule.time}` : ""}
+                            </strong>
+
                             <p>{upcomingSchedule.title}</p>
 
                             <div className="Schedule_hover_panel">
                                 <span>다가오는 약속</span>
-                                <strong>{upcomingSchedule.date}</strong>
+
+                                <strong>
+                                    {upcomingSchedule.date}
+                                    {upcomingSchedule.time ? ` ${upcomingSchedule.time}` : ""}
+                                </strong>
+
                                 <p>{upcomingSchedule.title}</p>
+
+                                {upcomingSchedule.place && (
+                                    <p>{upcomingSchedule.place}</p>
+                                )}
                             </div>
                         </>
                     ) : (
@@ -97,4 +123,5 @@ function SummaryCards({ chatList = [] }){
         </div>
     )
 }
+
 export default SummaryCards
